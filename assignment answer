@@ -1,0 +1,96 @@
+198. House Robber
+
+You are a professional robber planning to rob houses along a street. Each house has a certain amount of money stashed, the only constraint stopping you from robbing each of them is that adjacent houses have security systems connected and it will automatically contact the police if two adjacent houses were broken into on the same night.
+
+Given an integer array nums representing the amount of money of each house, return the maximum amount of money you can rob tonight without alerting the police.
+
+
+class Solution {
+    public int rob(int[] nums) {
+        if(nums.length==1) return nums[0];
+        int dp[]=new int[nums.length];
+        dp[0]=nums[0];
+        dp[1]=Math.max(nums[0],nums[1]);
+        for(int i=2;i<nums.length;i++){
+            if(dp[i]>0) return dp[i];
+            dp[i]=Math.max(nums[i]+dp[i-2],dp[i-1]);
+        }
+        return dp[nums.length-1];
+    }
+}
+
+
+Unique Paths in a Grid
+
+Given a grid of size m * n, lets assume you are starting at (1,1) and your goal is to reach (m,n). At any instance, if you are on (x,y), you can either go to (x, y + 1) or (x + 1, y).
+
+Now consider if some obstacles are added to the grids. How many unique paths would there be?
+
+An obstacle and empty space is marked as 1 and 0 respectively in the grid.
+
+public class Solution {
+    public int uniquePathsWithObstacles(int[][] arr) {
+        if(arr[0][0] == 1 || arr.length == 0){
+            return 0;
+        }
+        int m = arr.length;
+        int n = arr[0].length;
+        int[][] dp = new int[2][n];
+        dp[0][0] = 1;
+        for(int j=1; j<n; j++){
+            if(arr[0][j] == 1)
+                dp[0][j] = 0;
+            else
+                dp[0][j] = dp[0][j-1];
+        }
+        
+        for(int i=1; i<m; i++){
+            for(int j=0; j<n; j++){
+                if(j == 0){
+                    if(arr[i][j] == 1)
+                        dp[i%2][j] = 0;
+                    else
+                        dp[i%2][j] = dp[(i-1)%2][j];
+                }
+                else{
+                    if(arr[i][j] == 1){
+                        dp[i%2][j] = 0;
+                    }
+                    else{
+                        dp[i%2][j] = dp[(i-1)%2][j] + dp[i%2][j-1];
+                    }
+                }
+            }
+        }
+        return dp[(m-1)%2][n-1];
+    }
+}
+
+Stickler Thief
+
+Stickler the thief wants to loot money from a society having n houses in a single line. He is a weird person and follows a certain rule when looting the houses. According to the rule, he will never loot two consecutive houses. At the same time, he wants to maximize the amount he loots. The thief knows which house has what amount of money but is unable to come up with an optimal looting strategy. He asks for your help to find the maximum money he can get if he strictly follows the rule. ith house has a[i] amount of money present in it.
+
+
+class Solution
+{
+    //Function to find the maximum money the thief can get.
+    public int FindMaxSum(int arr[], int n)
+    {
+        // Your code here
+        int s1=0,s2=0;
+        for(int i=0;i<n;i++){
+            if(i%2==0){
+                s1=Math.max(s1+arr[i],s2);
+            }
+            else{
+                s2=Math.max(s2+arr[i],s1);
+            }
+        }
+        if(s1>s2){
+            return s1;
+        }
+        else{
+            return s2;
+        }
+    }
+}
